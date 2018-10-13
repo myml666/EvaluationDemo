@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nex3z.flowlayout.FlowLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:flChildSpacing="10dp"
+    app:flRowSpacing="5dp"
+    android:gravity="center_vertical"
+    android:id="@+id/view_evaluationchoiceimage_flowlayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="80dp"
+        android:scaleType="fitXY"
+        android:id="@+id/view_evaluationchoiceimage_img_add"
+        android:src="@drawable/ic_addimage"
+        android:layout_height="80dp" />
+</com.nex3z.flowlayout.FlowLayout>

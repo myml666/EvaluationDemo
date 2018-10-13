@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#dd000000"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent">
+    <com.github.chrisbanes.photoview.PhotoView
+        android:layout_width="match_parent"
+        android:id="@+id/activity_seephoto_pv_image"
+        android:layout_centerInParent="true"
+        android:scaleType="centerInside"
+        android:layout_height="match_parent" />
+    <ImageView
+        android:layout_width="30dp"
+        android:src="@drawable/ic_delet"
+        android:scaleType="fitXY"
+        android:layout_marginRight="5dp"
+        android:id="@+id/activity_seephoto_img_close"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_height="30dp" />
+</RelativeLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+        <com.itfitness.evaluationdemo.widget.EvaluationItem
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/item_regularevaluation_haoping"
+            app:selectImage="@drawable/ic_haoping_select"
+            app:unSelectImage="@drawable/ic_haoping_unselect"
+            app:text="好评"
+            app:selectTextColor="@color/colorEvaluationSelect"
+            app:unSelectTextColor="@color/colorEvaluationUnSelect"
+            android:layout_height="wrap_content">
+
+        </com.itfitness.evaluationdemo.widget.EvaluationItem>
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+        <com.itfitness.evaluationdemo.widget.EvaluationItem
+            android:layout_width="wrap_content"
+            app:selectImage="@drawable/ic_chaping_select"
+            app:unSelectImage="@drawable/ic_chaping_unselect"
+            app:text="中评"
+            android:id="@+id/item_regularevaluation_zhongping"
+            app:selectTextColor="@color/colorEvaluationSelect"
+            app:unSelectTextColor="@color/colorEvaluationUnSelect"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content">
+
+        </com.itfitness.evaluationdemo.widget.EvaluationItem>
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+        <com.itfitness.evaluationdemo.widget.EvaluationItem
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            app:text="差评"
+            android:id="@+id/item_regularevaluation_chaping"
+            app:selectImage="@drawable/ic_chaping_select"
+            app:unSelectImage="@drawable/ic_chaping_unselect"
+            app:selectTextColor="@color/colorEvaluationSelect"
+            app:unSelectTextColor="@color/colorEvaluationUnSelect"
+            android:layout_height="wrap_content">
+
+        </com.itfitness.evaluationdemo.widget.EvaluationItem>
+    </FrameLayout>
+</LinearLayout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="25dp"
+        android:id="@+id/my_module_view_evaluation_img"
+        android:src="@drawable/ic_haoping_unselect"
+        android:layout_height="30dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="好评"
+        android:textSize="13sp"
+        android:id="@+id/my_module_view_evaluation_tv"
+        android:textColor="#bfbfbf"
+        android:layout_marginLeft="3dp"
+        android:layout_height="wrap_content" />
+</LinearLayout>

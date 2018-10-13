@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="90dp"
+    android:layout_height="90dp">
+    <ImageView
+            android:layout_width="80dp"
+            android:scaleType="fitXY"
+            android:layout_margin="8dp"
+            android:id="@+id/item_regularevaluation_img_addimage"
+            android:src="@drawable/ic_empty_dracula"
+            android:layout_height="80dp" />
+    <ImageView
+            android:layout_width="20dp"
+            android:scaleType="fitXY"
+            android:layout_alignParentRight="true"
+            android:id="@+id/item_regularevaluation_img_deleteimage"
+            android:src="@drawable/ic_deleteevaluationimg"
+            android:layout_height="20dp" />
+</RelativeLayout>

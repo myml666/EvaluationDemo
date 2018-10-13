@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EvaluationItem">
+         <attr name="unSelectImage" format="reference"/>               
+         <attr name="selectImage" format="reference"/>  
+         <attr name="unSelectTextColor" format="reference"/>  
+         <attr name="selectTextColor" format="reference"/>
+        <attr name="text" format="string" />
+    </declare-styleable>
+</resources>

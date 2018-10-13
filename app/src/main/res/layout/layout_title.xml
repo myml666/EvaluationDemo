@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/titleBb"
+        android:id="@+id/my_moudle_title_toolbar"
+        android:layout_height="?attr/actionBarSize">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:text="标题"
+            android:layout_centerInParent="true"
+            android:id="@+id/layout_title_tv_title"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="3dp"
+            android:id="@+id/layout_title_img_back"
+            android:foreground="?attr/selectableItemBackground"
+            android:src="@drawable/ic_back"
+            android:layout_centerVertical="true"
+             />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="14sp"
+            android:text="标题"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/layout_title_tv_right_title"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</android.support.design.widget.AppBarLayout>
