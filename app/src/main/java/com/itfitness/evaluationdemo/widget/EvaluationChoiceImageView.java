@@ -36,6 +36,15 @@ public class EvaluationChoiceImageView extends RelativeLayout implements View.On
     private OnClickAddImageListener onClickAddImageListener;
     private OnClickDeleteImageListener onClickDeleteImageListener;
     private OnClickImageListener onClickImageListener;
+    private int maxChoicesImage=5;
+
+    public int getMaxChoicesImage() {
+        return maxChoicesImage;
+    }
+
+    public void setMaxChoicesImage(int maxChoicesImage) {
+        this.maxChoicesImage = maxChoicesImage;
+    }
 
     public OnClickAddImageListener getOnClickAddImageListener() {
         return onClickAddImageListener;
@@ -92,6 +101,9 @@ public class EvaluationChoiceImageView extends RelativeLayout implements View.On
         }
     }
     public void addImage(String imagePath){
+        if(mFlowlayoutChilds.size()+1>=maxChoicesImage){
+            viewEvaluationchoiceimageImgAdd.setVisibility(GONE);
+        }
         EvaluationChioceImageItem evaluationChioceImageItem=new EvaluationChioceImageItem(mContext);
         evaluationChioceImageItem.setOnChildClickListener(new EvaluationChioceImageItem.OnChildClickListener() {
             @Override
@@ -106,6 +118,7 @@ public class EvaluationChoiceImageView extends RelativeLayout implements View.On
                 onClickDeleteImageListener.onClickDeleteImage(mFlowlayoutChilds.indexOf(parent));
                 mFlowlayoutChilds.remove(parent);
                 viewEvaluationchoiceimageFlowlayout.removeView(parent);
+                viewEvaluationchoiceimageImgAdd.setVisibility(VISIBLE);
             }
         });
         evaluationChioceImageItem.setImage(imagePath);

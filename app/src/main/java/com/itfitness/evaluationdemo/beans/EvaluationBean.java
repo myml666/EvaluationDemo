@@ -1,6 +1,7 @@
 package com.itfitness.evaluationdemo.beans;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,12 @@ public class EvaluationBean {
     private int evaluatinType=1;//默认好评
     private String evaluationContent;//评价内容
     private List<File> evaluationImages;//评价图片集合
+
+    public EvaluationBean() {
+        if(evaluationImages==null){
+            evaluationImages=new ArrayList<>();
+        }
+    }
 
     public int getEvaluatinType() {
         return evaluatinType;

@@ -1,8 +1,13 @@
 package com.itfitness.evaluationdemo;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -12,16 +17,32 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.itfitness.evaluationdemo.base.BaseActivity;
+import com.itfitness.evaluationdemo.beans.EvaluationBean;
+import com.itfitness.evaluationdemo.utils.ChoiceImageUtils;
+import com.itfitness.evaluationdemo.utils.FileUtil;
 import com.itfitness.evaluationdemo.widget.EvaluationChoiceImageView;
 import com.itfitness.evaluationdemo.widget.EvaluationView;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.zhihu.matisse.Matisse;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.functions.Consumer;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class MainActivity extends BaseActivity {
     private RecyclerView activityMainRecycleOrderlist;
     private BaseQuickAdapter<String,BaseViewHolder> mBaseQuickAdapter;
     private List<String> mTempDatas;//模拟订单数据
+    private List<EvaluationBean> evaluationBeans;
+    private RxPermissions mRxPermissions;
+    private EvaluationChoiceImageView mTempEvaluationChoiceImageView;//存放临时的EvaluationChoiceImageView
+    private int mTempPosition;//存放选择的商品position
     @Override
     protected boolean isHaveTitle() {
         return true;
@@ -39,11 +60,22 @@ public class MainActivity extends BaseActivity {
 
     private void initDatas() {
 //        添加测试数据（简单的添加图片地址模拟订单）
+        if(mRxPermissions==null){
+            mRxPermissions=new RxPermissions(this);
+        }
+        if(evaluationBeans==null){
+            evaluationBeans=new ArrayList<>();
+        }
         if(mTempDatas==null){
             mTempDatas=new ArrayList<>();
             for (int x=0;x<4;x++){
-                mTempDatas.add("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3562318354,3929854534&fm=26&gp=0.jpg");
+                mTempDatas.add(""+x);
             }
+        }
+        for(int x=0;x<mTempDatas.size();x++){
+            EvaluationBean evaluationBean=new EvaluationBean();
+            evaluationBean.setEvaluatinType(1);
+            evaluationBeans.add(evaluationBean);
         }
         initAdapter();
     }
@@ -52,30 +84,31 @@ public class MainActivity extends BaseActivity {
         mBaseQuickAdapter=new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_regularevaluation,mTempDatas) {
             @Override
             protected void convert(BaseViewHolder helper, String item) {
-                int position=mBaseQuickAdapter.getData().indexOf(item);
+                final int itemposition=mBaseQuickAdapter.getData().indexOf(item);
                 ImageView itemRegularevaluationImgOrderimg=helper.getView(R.id.item_regularevaluation_img_orderimg);
                 EditText itemRegularevaluationEtContent=helper.getView(R.id.item_regularevaluation_et_content);
-                ImageView itemRegularevaluationImgAddimage=helper.getView(R.id.item_regularevaluation_img_addimage);
                 EvaluationView itemRegularevaluationEvaluatinview=helper.getView(R.id.item_regularevaluation_evaluatinview);
-                ImageView itemRegularevaluationImgDeleteimage=helper.getView(R.id.item_regularevaluation_img_deleteimage);
                 final EvaluationChoiceImageView itemRegularevaluationEvaluationchoiceimageview=helper.getView(R.id.item_regularevaluation_evaluationchoiceimageview);
-                Glide.with(MainActivity.this).load(item).into(itemRegularevaluationImgOrderimg);
+                Glide.with(MainActivity.this).load("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3562318354,3929854534&fm=26&gp=0.jpg").into(itemRegularevaluationImgOrderimg);
                 itemRegularevaluationEvaluatinview.setmEvaluationSelectListener(new EvaluationView.OnEvaluationSelectListener() {
                     @Override
                     public void onEvaluationSelect(int evaluationType) {
-                        Toast.makeText(MainActivity.this, evaluationType+"", Toast.LENGTH_SHORT).show();
+                        evaluationBeans.get(itemposition).setEvaluatinType(evaluationType);
                     }
                 });
                 itemRegularevaluationEvaluationchoiceimageview.setOnClickAddImageListener(new EvaluationChoiceImageView.OnClickAddImageListener() {
                     @Override
                     public void onClickAddImage() {
-                        itemRegularevaluationEvaluationchoiceimageview.addImage("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3498118633,3420624807&fm=26&gp=0.jpg");
+                        Toast.makeText(mContext, ""+itemposition, Toast.LENGTH_SHORT).show();
+                        mTempEvaluationChoiceImageView=itemRegularevaluationEvaluationchoiceimageview;
+                        mTempPosition=itemposition;
+                        choiceImage();
                     }
                 });
                 itemRegularevaluationEvaluationchoiceimageview.setOnClickDeleteImageListener(new EvaluationChoiceImageView.OnClickDeleteImageListener() {
                     @Override
                     public void onClickDeleteImage(int position) {
-                        Toast.makeText(MainActivity.this, "删除"+position, Toast.LENGTH_SHORT).show();
+                        evaluationBeans.get(itemposition).getEvaluationImages().remove(position);
                     }
                 });
                 itemRegularevaluationEvaluationchoiceimageview.setOnClickImageListener(new EvaluationChoiceImageView.OnClickImageListener() {
@@ -89,13 +122,66 @@ public class MainActivity extends BaseActivity {
         activityMainRecycleOrderlist.setAdapter(mBaseQuickAdapter);
     }
 
+    @SuppressLint("CheckResult")
+    private void choiceImage(){
+        mRxPermissions
+                .requestEachCombined(Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(new Consumer<Permission>() {
+                    @Override
+                    public void accept(Permission permission) throws Exception {
+                        if (permission.granted) {
+                            ChoiceImageUtils.choiceImage(MainActivity.this);
+                        } else if (permission.shouldShowRequestPermissionRationale) {
+                            Toast.makeText(MainActivity.this, "您已拒绝权限申请", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "您已拒绝权限申请，请前往设置>应用管理>权限管理打开权限", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ChoiceImageUtils.REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            File fileByUri = FileUtil.getFileByUri(Matisse.obtainResult(data).get(0), this);
+//            压缩文件
+            Luban.with(this)
+                    .load(fileByUri)
+                    .ignoreBy(100)
+                    .filter(new CompressionPredicate() {
+                        @Override
+                        public boolean apply(String path) {
+                            return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                        }
+                    })
+                    .setCompressListener(new OnCompressListener() {
+                        @Override
+                        public void onStart() {
+                        }
 
+                        @Override
+                        public void onSuccess(File file) {
+                            evaluationBeans.get(mTempPosition).getEvaluationImages().add(0,file);
+                            mTempEvaluationChoiceImageView.addImage(file.getAbsolutePath());
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                        }
+                    }).launch();
+        }
+    }
     private void initView() {
         setTitle("发布评价");
         setRightTitle(true, "发布", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                for (EvaluationBean evaluationBean:evaluationBeans){
+                    Log.e("测试",evaluationBean.toString());
+                }
+                Toast.makeText(MainActivity.this, "发布", Toast.LENGTH_SHORT).show();
             }
         });
         activityMainRecycleOrderlist = (RecyclerView) findViewById(R.id.activity_main_recycle_orderlist);
