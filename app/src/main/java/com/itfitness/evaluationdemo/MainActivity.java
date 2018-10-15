@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -16,10 +18,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.itfitness.evaluationdemo.api.Api;
 import com.itfitness.evaluationdemo.base.BaseActivity;
 import com.itfitness.evaluationdemo.beans.EvaluationBean;
+import com.itfitness.evaluationdemo.beans.ResultBean;
 import com.itfitness.evaluationdemo.utils.ChoiceImageUtils;
 import com.itfitness.evaluationdemo.utils.FileUtil;
+import com.itfitness.evaluationdemo.utils.RetrofitUtils;
 import com.itfitness.evaluationdemo.widget.EvaluationChoiceImageView;
 import com.itfitness.evaluationdemo.widget.EvaluationView;
 import com.tbruyelle.rxpermissions2.Permission;
@@ -28,9 +33,14 @@ import com.zhihu.matisse.Matisse;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import top.zibin.luban.CompressionPredicate;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
@@ -90,6 +100,22 @@ public class MainActivity extends BaseActivity {
                 EvaluationView itemRegularevaluationEvaluatinview=helper.getView(R.id.item_regularevaluation_evaluatinview);
                 final EvaluationChoiceImageView itemRegularevaluationEvaluationchoiceimageview=helper.getView(R.id.item_regularevaluation_evaluationchoiceimageview);
                 Glide.with(MainActivity.this).load("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3562318354,3929854534&fm=26&gp=0.jpg").into(itemRegularevaluationImgOrderimg);
+                itemRegularevaluationEtContent.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        evaluationBeans.get(itemposition).setEvaluationContent(s.toString());
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
                 itemRegularevaluationEvaluatinview.setmEvaluationSelectListener(new EvaluationView.OnEvaluationSelectListener() {
                     @Override
                     public void onEvaluationSelect(int evaluationType) {
@@ -176,12 +202,34 @@ public class MainActivity extends BaseActivity {
     private void initView() {
         setTitle("发布评价");
         setRightTitle(true, "发布", new View.OnClickListener() {
+            @SuppressLint("CheckResult")
             @Override
             public void onClick(View v) {
                 for (EvaluationBean evaluationBean:evaluationBeans){
                     Log.e("测试",evaluationBean.toString());
+                    HashMap<String,String> parama=new HashMap<>();
+                    parama.put("evaluationType",evaluationBean.getEvaluatinType()+"");
+                    parama.put("evaluationContent",evaluationBean.getEvaluationContent());
+                    HashMap<String, RequestBody> pics=new HashMap<>();
+                    for (File file:evaluationBean.getEvaluationImages()){
+                        pics.put(file.getName(),RequestBody.create(MediaType.parse("image/*"), file));
+                    }
+                    RetrofitUtils.getInstance().getApiServier(Api.class)
+                            .submitEvaluation(parama,pics)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Consumer<ResultBean>() {
+                                @Override
+                                public void accept(ResultBean resultBean) throws Exception {
+
+                                }
+                            }, new Consumer<Throwable>() {
+                                @Override
+                                public void accept(Throwable throwable) throws Exception {
+
+                                }
+                            });
                 }
-                Toast.makeText(MainActivity.this, "发布", Toast.LENGTH_SHORT).show();
             }
         });
         activityMainRecycleOrderlist = (RecyclerView) findViewById(R.id.activity_main_recycle_orderlist);
