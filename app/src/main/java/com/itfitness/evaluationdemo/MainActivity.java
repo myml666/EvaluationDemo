@@ -140,7 +140,10 @@ public class MainActivity extends BaseActivity {
                 itemRegularevaluationEvaluationchoiceimageview.setOnClickImageListener(new EvaluationChoiceImageView.OnClickImageListener() {
                     @Override
                     public void onClickImage(int position) {
-                        Toast.makeText(MainActivity.this, "查看"+position, Toast.LENGTH_SHORT).show();
+                        Intent intent=new Intent(MainActivity.this,SeePhotoActivity.class);
+                        intent.putExtra("photoPath",evaluationBeans.get(itemposition).getEvaluationImages().get(position).getAbsolutePath());
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                     }
                 });
             }

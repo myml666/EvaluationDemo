@@ -58,6 +58,12 @@ public class SeePhotoActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    @Override
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.activity_seephoto_img_close) {
