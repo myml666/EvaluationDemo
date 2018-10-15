@@ -36,7 +36,7 @@ public class EvaluationChoiceImageView extends RelativeLayout implements View.On
     private OnClickAddImageListener onClickAddImageListener;
     private OnClickDeleteImageListener onClickDeleteImageListener;
     private OnClickImageListener onClickImageListener;
-    private int maxChoicesImage=5;
+    private int maxChoicesImage=10;
 
     public int getMaxChoicesImage() {
         return maxChoicesImage;

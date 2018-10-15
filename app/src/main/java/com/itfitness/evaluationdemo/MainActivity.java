@@ -94,12 +94,14 @@ public class MainActivity extends BaseActivity {
         mBaseQuickAdapter=new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_regularevaluation,mTempDatas) {
             @Override
             protected void convert(BaseViewHolder helper, String item) {
+                //获取每个Item的position，用于对应evaluationBeans中的各个商品对应的EvaluationBean
                 final int itemposition=mBaseQuickAdapter.getData().indexOf(item);
                 ImageView itemRegularevaluationImgOrderimg=helper.getView(R.id.item_regularevaluation_img_orderimg);
                 EditText itemRegularevaluationEtContent=helper.getView(R.id.item_regularevaluation_et_content);
                 EvaluationView itemRegularevaluationEvaluatinview=helper.getView(R.id.item_regularevaluation_evaluatinview);
                 final EvaluationChoiceImageView itemRegularevaluationEvaluationchoiceimageview=helper.getView(R.id.item_regularevaluation_evaluationchoiceimageview);
                 Glide.with(MainActivity.this).load("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3562318354,3929854534&fm=26&gp=0.jpg").into(itemRegularevaluationImgOrderimg);
+                //这里通过监听事件将EditText中的数据传到EvaluationBean中
                 itemRegularevaluationEtContent.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -126,6 +128,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onClickAddImage() {
                         Toast.makeText(mContext, ""+itemposition, Toast.LENGTH_SHORT).show();
+                        //这里将EvaluationChoiceImageView存到临时变量中好对不同的EvaluationChoiceImageView添加图片
                         mTempEvaluationChoiceImageView=itemRegularevaluationEvaluationchoiceimageview;
                         mTempPosition=itemposition;
                         choiceImage();
